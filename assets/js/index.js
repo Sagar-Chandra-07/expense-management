@@ -97,7 +97,7 @@ var budgetController = (function(){
       // Calculate budget: income - expenses
       data.budget = data.totals.inc - data.totals.exp;
       // Calculate the percentage of income that we spent
-      if(data.totals.inc>0){
+      if(data.totals.inc>=100){
         data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
       } else {
         data.percentage = console.error("Invalid Input");
@@ -347,13 +347,20 @@ var controller = (function(budgetCtrl,UICtrl){
     if(input.description !== "" && !isNaN(input.value) && input.value>0){
       // 2. Add the item to the budget controller
       newItem = budgetCtrl.addItem(input.type,input.description,input.value);
-      // 3. Add the item to the UI
+       // 3. Check if the expense value is greater than total income
+       if (input.type === "exp" && input.value > budgetCtrl.getBudget().totalInc) {
+        alert("Error: Expense cannot be greater than total income!");
+        // Remove the item if already added to the budgetController
+        budgetCtrl.deleteItem(input.type, newItem.id);
+        return;
+    }
+      // 4. Add the item to the UI
       addItem = UICtrl.addListItem(newItem,input.type);
-      // 4. Clear the fields
+      // 5. Clear the fields
       UICtrl.clearFields();
-      // 5. Calculate and update budget
+      // 6. Calculate and update budget
       updateBudget();
-      // 6. Calculate and update percentages
+      // 7. Calculate and update percentages
       updatePercentages();
     }
   };
