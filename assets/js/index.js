@@ -100,7 +100,8 @@ var budgetController = (function(){
       if(data.totals.inc>0){
         data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
       } else {
-        data.percentage = -1;
+        data.percentage = console.error("Invalid Input");
+        ;
       }
     },
 
@@ -238,10 +239,11 @@ var UIController = (function(){
       document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(obj.totalInc,"inc");
       document.querySelector(DOMstrings.expensesLabel).textContent = formatNumber(obj.totalExp,"exp");
 
-      if(obj.percentage>0){
+      if(obj.percentage<100){
         document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage+"%";
-      } else {
-        document.querySelector(DOMstrings.percentageLabel).textContent = "---";
+      } 
+      else {
+        document.querySelector(DOMstrings.percentageLabel).textContent = "__";
       }
 
     },
